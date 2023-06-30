@@ -48,10 +48,10 @@ const pizzaData = [
 ];
 
 
-function Pizza (props) {
-  const {name, ingredients, price, photoName} = props;
+function Pizza ({pizza}) {
+  const {name, ingredients, price, photoName} = pizza;
   return (
-    <div className='pizza'>
+    <li className='pizza'>
       <img 
         src={photoName}
         alt={name}/>
@@ -60,7 +60,7 @@ function Pizza (props) {
           <p>{ingredients}</p>
           <span>{price + 3}</span>
         </div>
-    </div>
+    </li>
   );
 }
 
@@ -71,27 +71,40 @@ function Header () {
     </header>
   );
 }
-
+const pizzas = pizzaData.map(pizza => {
+  return (<Pizza
+          pizza={pizza}/>);
+});
 function Menu () {
   return (
     <main className='menu'>
       <h2>Our menu</h2>
-      <Pizza
-        name='Spinaci pizza'
-        ingredients='Tomato, mozarella, spinach, and ricotta cheese'
-        photoName='pizzas/spinaci.jpg'
-        price={10}/>
-      <Pizza
-        name='Funghi pizza'
-        ingredients='Tomato, mozarella, mushrooms, and onion'
-        photoName='pizzas/funghi.jpg'
-        price={12}/>
+      <ul className='pizzas'>
+        {pizzas}
+      </ul>
     </main>
   );
 }
 
 function Footer () {
-  return <footer className='footer'>We are currently open!</footer>
+  const openHour = 12,
+        closeHour = 22,
+        hour = new Date ().getHours();
+  const isOpen = hour >= openHour && hour < closeHour;
+  return (
+          <footer className='footer'>
+            {isOpen && (
+              <div className='order'>
+                <p>
+                  We're open until {closeHour}:00. Come visit Us or order online.
+                </p>
+                <button className='btn'>
+                  Order
+                </button>
+              </div>
+            )}
+          </footer>
+        );
 }
 
 function App() {
